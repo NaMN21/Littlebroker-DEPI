@@ -13,9 +13,12 @@ def main():
 
     # Generate button
     if st.button("Generate"):
-        # Generate text using the pipeline
-        generated_text = pipe(prompt, max_length=100)
-        st.text_area("Generated Text:", value=generated_text[0]['generated_text'])
+        if prompt:
+            # Generate text using the pipeline
+            generated_text = pipe(prompt, max_length=100)
+            st.text_area("Generated Text:", value=generated_text[0]['generated_text'])
+        else:
+            st.warning("Please enter a prompt.")
 
 if __name__ == "__main__":
     main()
