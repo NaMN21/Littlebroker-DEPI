@@ -3,7 +3,7 @@ name: Python application
 on:
   push:
     branches:
-      - main  # قم بتغيير هذا إلى اسم الفرع الذي تعمل عليه
+      - main  
 
 jobs:
   build:
