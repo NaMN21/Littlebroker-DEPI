@@ -58,4 +58,4 @@ jobs:
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6C202B8B721E438FAAECB1C8D3E28534 }}
       - name: Show Azure App Service logs
         run: |
-          az webapp log tail --name 'Littlebroker' --resource-group 'YourResourceGroup'
+          az webapp log tail --name 'Littlebroker' --resource-group 'Littlebroker_group'
