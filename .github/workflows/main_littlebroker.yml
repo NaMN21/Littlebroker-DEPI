@@ -9,53 +9,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python version
-        uses: actions/setup-python@v1
-        with:
-          python-version: '3.9'
-      - name: Create and start virtual environment
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Zip artifact for deployment
-        run: |
-          zip -r release.zip . -x "*.git*" -x "*venv*" -x "*.github*" -x "*.pytest_cache*" -x "*.mypy_cache*"
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
         with:
           name: python-app
           path: |
-            release.zip
+            .  # Ensure all necessary files are included
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    env:
-      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: python-app
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
-      - name: Login to Azure
-        run: |
-          az login --service-principal -u $AZURE_CLIENT_ID -p "${{ secrets.AZURE_CLIENT_SECRET }}" --tenant $AZURE_TENANT_ID
-
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
         with:
           app-name: 'Littlebroker'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6C202B8B721E438FAAECB1C8D3E28534 }}
-      - name: Show Azure App Service logs
-        run: |
-          az webapp log tail --name 'Littlebroker' --resource-group 'Littlebroker_group'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+          enable-oryx-build: true
