@@ -1,9 +1,9 @@
 # تثبيت المكتبات من ملف requirements.txt
-def install_requirements():
-    try:
-        subprocess.run(['pip', 'install', '-r', 'requirements.txt'], check=True)
-    except subprocess.CalledProcessError:
-        st.error("Failed to install required packages.")
+# def install_requirements():
+#     try:
+#         subprocess.run(['pip', 'install', '-r', 'requirements.txt'], check=True)
+#     except subprocess.CalledProcessError:
+#         st.error("Failed to install required packages.")
 
 
         
@@ -26,7 +26,7 @@ def main():
     st.title("GPT-2 Text Generation")
 
     # تثبيت المكتبات
-    install_requirements()
+    # install_requirements()
 
     # تحميل الـ pipeline
     pipe = load_pipeline()
